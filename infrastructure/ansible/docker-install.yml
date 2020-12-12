@@ -44,11 +44,15 @@
           - docker-ce
           - docker-ce-cli
           - containerd.io
+      notify:
+        - alert restart
 
     - name: enable docker service on startup
       service:
         name: docker
         enabled: yes
+      notify:
+        - alert restart
 
     # the docker group creation/user update will enable the user 
     # to run docker without root permissions
@@ -63,3 +67,12 @@
         name: "{{ item }}"
         group: docker
         append: yes
+      notify:
+        - alert restart
+
+    # Handlers - used to notify user when everything has finished (if anything changed)
+    handlers:
+      - name: alert restart
+        debug:
+          msg: "localhost modified. Please restart system"
+...
