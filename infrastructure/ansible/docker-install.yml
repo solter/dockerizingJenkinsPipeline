@@ -1,0 +1,65 @@
+---
+- name: install docker
+  hosts: local # do this for the local group (localhost)
+  become: yes # make sure to do this as the root user
+
+  # UPDATE THIS with the list of users which should be able to run docker without sudo priveleges
+  # these users will be added to the docker group
+  vars:
+    docker_users:
+      - 'pmsolfest'
+
+  tasks:
+    # this follows the installation process defined at https://docs.docker.com/engine/install/ubuntu/
+    - name: remove old versions
+      apt:
+        state: absent
+        udpate_cache: yes
+        name:
+          - docker
+          - docker-engine
+          - docker.io
+          - containerd
+          - runc
+    - name: install prereqs
+      apt:
+        state: present
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+    - name: add the docker GPG key
+      shell:
+        cmd: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    - name: add docker stable repository
+      shell:
+        cmd: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    - name: install docker packages
+      apt:
+        state: present
+        update_cache: yes
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+
+    - name: enable docker service on startup
+      service:
+        name: docker
+        enabled: yes
+
+    # the docker group creation/user update will enable the user 
+    # to run docker without root permissions
+    - name: create docker group
+      group:
+        name: docker
+        state: present
+
+    - name: add users to docker group
+      loop: "{{ docker_users }}"
+      user:
+        name: "{{ item }}"
+        group: docker
+        append: yes
