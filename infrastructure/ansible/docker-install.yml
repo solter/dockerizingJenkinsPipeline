@@ -14,7 +14,7 @@
     - name: remove old versions
       apt:
         state: absent
-        udpate_cache: yes
+        update_cache: yes
         name:
           - docker
           - docker-engine
@@ -70,9 +70,9 @@
       notify:
         - alert restart
 
-    # Handlers - used to notify user when everything has finished (if anything changed)
-    handlers:
-      - name: alert restart
-        debug:
-          msg: "localhost modified. Please restart system"
+  # Handlers - used to notify user when everything has finished (if anything changed)
+  handlers:
+    - name: alert restart
+      debug:
+        msg: "localhost modified. Please restart system"
 ...
