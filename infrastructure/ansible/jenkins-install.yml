@@ -1,0 +1,82 @@
+---
+- name: install Jenkins in docker
+  hosts: local
+
+  tasks:
+    # this follows the installation process defined at https://www.jenkins.io/doc/book/installing/docker/
+    - name: create bridge network
+      community.docker.docker_network:
+        name: jenkins
+        state: present
+
+    # TODO: figure out how to use the ansible vault to get this to work ok
+    #- name: log in to docker hub
+    #  community.docker.docker_login:
+    #    state: present
+    #    username: USERNAME_FROM_VAULT
+    #    password: PASSWORD_FROM_VAULT
+    #    config_path: "~/.docker/config.json"
+    #    registry_url: "https://index.docker.io/v1/" # dockerhub
+    
+    # create the volumes for the Jenkins images
+    - name: create jenkins-data volume
+      community.docker.docker_volume:
+        name: jenkins-data
+        state: present
+
+    - name: create jenkins-docker-certs volume
+      community.docker.docker_volume:
+        name: jenkins-docker-certs
+        state: present
+
+    # the docker:dind container allows jenkins to use docker builds itself
+    - name: download docker:dind image
+      community.docker.docker_image:
+        name: docker:dind
+        state: present
+        source: pull
+
+    - name: launch docker:dind container
+      community.docker.docker_container:
+        name: jenkins-docker
+        image: docker:dind
+        state: started
+        privileged: yes
+        env:
+          DOCKER_TLS_CERTDIR: "/certs"
+        volumes:
+          - jenkins-docker-certs:/certs/client
+          - jenkins-data:/var/jenkins_home
+        # set up the network to enable the jenkins image to connect
+        networks:
+          - name: jenkins
+            aliases:
+              - docker
+        published_ports:
+          - 2376:2376
+
+    # pull in and launch the Jenkins docker file
+    - name: download my jenkins image for the simplilearn course 1, project 1
+      community.docker.docker_image:
+        name: pmsolfest/jenkins-pmsolfest:slp1.1
+        state: present
+        source: pull
+
+    - name: launch jenkins container
+      community.docker.docker_container:
+        name: jenkins-solter
+        image: pmsolfest/jenkins-pmsolfest:slp1.1
+        state: started
+        privileged: yes
+        env:
+          DOCKER_HOST: "tcp://docker:2376"
+          DOCKER_CERT_PATH: "/certs/client"
+          DOCKER_TLS_VERIFY: "1"
+        volumes:
+          - jenkins-docker-certs:/certs/client:ro
+          - jenkins-data:/var/jenkins_home
+        # make Jenkins UI accessible from port 8080
+        networks:
+          - name: jenkins
+        published_ports:
+          - 8080:8080
