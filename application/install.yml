@@ -1,0 +1,21 @@
+---
+- name: install application
+  hosts: local
+
+  tasks:
+    - name: build and docker application
+      community.docker.docker_image:
+        name: pmsolfest/project1.1-application
+        state: present 
+        source: build
+        build:
+          path: ./Dockerfile
+        tag: slp1.1
+        push: yes
+    - name: install application
+      community.docker.docker_container:
+        name: my_webapp
+        image: pmsolfest/project1.1-application:slp1.1
+        state: started
+        published_ports:
+          - 56324:56324
