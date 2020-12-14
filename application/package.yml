@@ -1,6 +1,7 @@
 ---
 - name: install application
   hosts: local
+  connection: local # use the localhost instead of an ssh connection
 
   tasks:
     - name: build and docker application
