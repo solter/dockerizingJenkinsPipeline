@@ -1,31 +1,41 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:3-alpine'
-    }
-  }
+  agent none
   stages {
     stage('Build') {
+      agent {
+        docker {
+          image 'maven:3-alpine'
+        }
+      }
       steps{
         sh 'cd application; mvn -B compile'
       }
     }
     stage('Unit Test') {
+      agent {
+        docker {
+          image 'maven:3-alpine'
+        }
+      }
+      steps{
       steps{
         sh 'cd application; mvn -B verify'
       }
     }
     stage('Package') {
+      agent any
       steps {
         ansiblePlaybook(playbook:'./application/package.yml')
       }
     }
     stage('Integration Test') {
+      agent any
       steps {
         echo "TODO: poke localhost:56324 with a test script"
       }
     }
     stage('Upload') {
+      agent any
       steps {
         echo "TODO: upload image to dockerhub"
       }
