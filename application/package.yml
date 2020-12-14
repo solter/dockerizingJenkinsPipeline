@@ -18,7 +18,8 @@
         state: present 
         source: build
         build:
-          path: /var/jenkins_home/App.DockerFile
+          dockerfile: App.DockerFile
+          path: /var/jenkins_home/
         tag: slp1.1
         push: no
     - name: install application
