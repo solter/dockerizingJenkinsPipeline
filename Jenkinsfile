@@ -17,8 +17,7 @@ pipeline {
     }
     stage('Package') {
       steps {
-        echo "TODO: call ansible script"
-        ansiblePlaybook(playbook:./application/package.yml)
+        ansiblePlaybook(playbook:'./application/package.yml')
       }
     }
     stage('Integration Test') {
