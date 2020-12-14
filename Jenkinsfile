@@ -24,7 +24,7 @@ pipeline {
     stage('Package') {
       agent any
       steps {
-        ansiblePlaybook(playbook:'./application/package.yml')
+        ansiblePlaybook(inventory: './infrastructure/ansible/localhosts', playbook:'./application/package.yml')
       }
     }
     stage('Integration Test') {
