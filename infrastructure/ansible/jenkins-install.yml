@@ -10,13 +10,13 @@
         state: present
 
     # TODO: figure out how to use the ansible vault to get this to work ok
-    #- name: log in to docker hub
-    #  community.docker.docker_login:
-    #    state: present
-    #    username: USERNAME_FROM_VAULT
-    #    password: PASSWORD_FROM_VAULT
-    #    config_path: "~/.docker/config.json"
-    #    registry_url: "https://index.docker.io/v1/" # dockerhub
+    - name: log in to docker hub
+      community.docker.docker_login:
+        state: present
+        username: USERNAME
+        password: LOGIN_PWORD
+        config_path: "~/.docker/config.json"
+        registry_url: "https://index.docker.io/v1/" # dockerhub
     
     # create the volumes for the Jenkins images
     - name: create jenkins-data volume
