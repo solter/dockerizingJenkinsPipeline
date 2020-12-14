@@ -5,6 +5,7 @@
 
 FROM jenkins/jenkins:2.263.1-lts-slim
 USER root
+# default stuff
 RUN apt-get update && apt-get install -y apt-transport-https \
        ca-certificates curl gnupg2 \
        software-properties-common
@@ -14,8 +15,15 @@ RUN add-apt-repository \
        "deb [arch=amd64] https://download.docker.com/linux/debian \
        $(lsb_release -cs) stable"
 RUN apt-get update && apt-get install -y docker-ce-cli
-USER jenkins
+
+# install ansible for usage within Jenkins
+RUN apt-get install -y python3 python3-pip
+RUN python3 -m pip install ansible
+RUN python3 -m pip install docker
+RUN ansible-galaxy collection install community.docker
+
 # set it up with the blueocean, maven, and docker plugins
+USER jenkins
 RUN jenkins-plugin-cli --plugins blueocean:1.24.3
 RUN jenkins-plugin-cli --plugins docker-workflow:1.25
 RUN jenkins-plugin-cli --plugins ansible:1.1
