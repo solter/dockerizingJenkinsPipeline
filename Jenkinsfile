@@ -18,7 +18,6 @@ pipeline {
         }
       }
       steps{
-      steps{
         sh 'cd application; mvn -B verify'
       }
     }
