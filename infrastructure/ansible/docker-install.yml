@@ -1,6 +1,7 @@
 ---
 - name: install docker
   hosts: local # do this for the local group (localhost)
+  connection: local
   become: yes # make sure to do this as the root user
 
   # UPDATE THIS with the list of users which should be able to run docker without sudo priveleges

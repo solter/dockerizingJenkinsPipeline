@@ -1,5 +1,6 @@
 ---
 - name: install Jenkins in docker
+  connection: local
   hosts: local
 
   vars:

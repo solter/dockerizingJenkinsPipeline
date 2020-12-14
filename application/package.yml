@@ -10,7 +10,7 @@
         state: present 
         source: build
         build:
-          path: ./Dockerfile
+          path: ./application/Dockerfile
         tag: slp1.1
         push: no
     - name: install application
