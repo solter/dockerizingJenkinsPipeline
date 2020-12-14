@@ -21,7 +21,7 @@
           dockerfile: App.DockerFile
           path: /var/jenkins_home/
         tag: slp1.1
-        push: no
+        push: yes
     - name: install application
       community.docker.docker_container:
         name: my_webapp
