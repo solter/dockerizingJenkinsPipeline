@@ -20,7 +20,6 @@ pipeline {
 
     stage('Package') {
       steps {
-        ansiblePlaybook './application/package.yml'
         sh '''cd application; docker build -t pmsolfest/project1.1-application:slp1.1 .
 '''
       }
