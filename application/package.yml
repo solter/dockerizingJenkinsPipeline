@@ -11,7 +11,7 @@
         build:
           path: ./Dockerfile
         tag: slp1.1
-        push: yes
+        push: no
     - name: install application
       community.docker.docker_container:
         name: my_webapp
