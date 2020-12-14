@@ -1,6 +1,6 @@
 ---
 - name: install docker
-  hosts: local # do this for the local group (localhost)
+  hosts: localhost
   connection: local
   become: yes # make sure to do this as the root user
 

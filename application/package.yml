@@ -1,16 +1,24 @@
 ---
 - name: install application
-  hosts: local
+  hosts: localhost
   connection: local # use the localhost instead of an ssh connection
 
   tasks:
+    # download the dockerfile from github, grabbing the version for the specific commit
+    - name: download dockerfile
+      get_url:
+        url: "https://raw.githubusercontent.com/solter/dockerizingJenkinsPipeline/{{ lookup('env', 'GIT_COMMIT') }}/application/Dockerfile"
+        dest: /var/jenkins_home/App.DockerFile
+        force: yes
+        mode: u=rw,g=r,o=r
+
     - name: build and docker application
       community.docker.docker_image:
         name: pmsolfest/project1.1-application
         state: present 
         source: build
         build:
-          path: ./application/Dockerfile
+          path: /var/jenkins_home/App.DockerFile
         tag: slp1.1
         push: no
     - name: install application

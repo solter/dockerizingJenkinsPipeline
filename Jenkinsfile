@@ -5,6 +5,7 @@ pipeline {
       agent {
         docker {
           image 'maven:3-alpine'
+          args '-v /var/jenkins_home/.m2:/root/.m2'
         }
       }
       steps{
@@ -15,6 +16,7 @@ pipeline {
       agent {
         docker {
           image 'maven:3-alpine'
+          args '-v /var/jenkins_home/.m2:/root/.m2'
         }
       }
       steps{
@@ -24,7 +26,9 @@ pipeline {
     stage('Package') {
       agent any
       steps {
-        ansiblePlaybook(inventory: './infrastructure/ansible/localhosts', playbook:'./application/package.yml')
+        ansiblePlaybook(
+          inventory: './infrastructure/ansible/localhosts', 
+          playbook:'./application/package.yml')
       }
     }
     stage('Integration Test') {

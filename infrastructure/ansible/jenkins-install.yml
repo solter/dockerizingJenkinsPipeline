@@ -1,7 +1,7 @@
 ---
 - name: install Jenkins in docker
+  hosts: localhost
   connection: local
-  hosts: local
 
   vars:
     # TODO: figure out how to use the ansible vault to get this to work ok

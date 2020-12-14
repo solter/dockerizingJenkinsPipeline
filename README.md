@@ -1,21 +1,6 @@
-# SimpliLearn Class Project
-This is a template repository that is set up to create new repos that can be used for Simplilearn class projects.
+# Dockerizing Jenkins Pipeline
+This is project 1 from course 1 for the DevOps class.
 
-To use this, create a new repo from this template and do the following
-- [ ] Create a project with the following columns
-    * Requirements
-    * To Do
-    * In Progress
-    * Done
-- [ ] Create the "Instructor Feedback" and "requirement" labels
-- [ ] Move the "wiki" pages into the wiki and out of the repo
-- [ ] Update the wiki pages for the specific project
-- [ ] Create the requirements "Issues"
-- [ ] Create the set of tasks needed to be completed
-- [ ] Remove this section
-
-## Notes for instructor 
-### Details
 Please see the [project wiki](../../wiki) for the details.
 
 ## Feedback
