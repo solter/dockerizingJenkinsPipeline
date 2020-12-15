@@ -30,7 +30,7 @@ pipeline {
     stage('Dockerize') {
       agent any
       steps {
-        ansiblePlaybook(inventory: './infrastructure/ansible/localhosts', playbook: './application/package.yml')
+        ansiblePlaybook(inventory: './infrastructure/ansible/localhosts', playbook: './application/package.yml', extras: '-vvv')
       }
     }
   }
