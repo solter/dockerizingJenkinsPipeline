@@ -33,8 +33,8 @@ pipeline {
     stage('Dockerize') {
       agent any
       steps {
+        unstash 'app'
         dir('/var/jenkins_home/app_build') {
-          unstash 'app'
           unstash 'dockerfile'
         }
         ansiblePlaybook(inventory: './infrastructure/ansible/localhosts', playbook: './application/package.yml', extras: '-vvv')

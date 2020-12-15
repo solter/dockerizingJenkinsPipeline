@@ -5,10 +5,10 @@
 
   tasks:
     - name: get jar file name
-      command: ls /var/jenkins_home/app_build/
+      command: find . -name "*.jar"
       register: jar_file_path
 
-    - debug: var=jar_file_path.stdout_lines
+    - debug: var=jar_file_path.stdout_lines[0]
 
     - name: build and docker application
       community.docker.docker_image:
@@ -16,8 +16,10 @@
         state: present 
         source: build
         build:
-          dockerfile: DockerFile
-          path: /var/jenkins_home/app_build
+          dockerfile: Dockerfile
+          path: /var/jenkins_home/app_build/application
+          args:
+            JAR_FILE: "{{ jar_file_path.stdout_lines[0] }}"
         tag: slp1.1
         push: yes
     - name: install application
