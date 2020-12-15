@@ -12,6 +12,12 @@
         force: yes
         mode: u=rw,g=r,o=r
 
+    - name: get jar file name
+      command: ls /var/jenkins_home/.m2/com/solfest/application/slp1.1-SNAPSHOT/*.jar
+      register: jar_file_path
+
+    - debug: var=jar_file_path.stdout_lines
+
     - name: build and docker application
       community.docker.docker_image:
         name: pmsolfest/project1.1-application
@@ -20,6 +26,9 @@
         build:
           dockerfile: App.DockerFile
           path: /var/jenkins_home/
+          args:
+            JAR_FILE: "{{ jar_file_path }}"
+
         tag: slp1.1
         push: yes
     - name: install application
