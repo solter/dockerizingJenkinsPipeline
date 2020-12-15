@@ -11,6 +11,7 @@ pipeline {
       }
       steps{
         sh 'cd application; umask 0002; mvn -Dmaven.repo.local=/var/local/.m2 -B -e compile'
+
       }
     }
 
@@ -24,12 +25,18 @@ pipeline {
       }
       steps{
         sh 'cd application; umask 0002; mvn -Dmaven.repo.local=/var/local/.m2 -B install'
+        stash includes: 'application/target/*.jar', name:'app'
+        stash includes: 'application/Dockerfile', name:'dockerfile'
       }
     }
 
     stage('Dockerize') {
       agent any
       steps {
+        dir('/var/jenkins_home/app_build') {
+          unstash 'app'
+          unstash 'dockerfile'
+        }
         ansiblePlaybook(inventory: './infrastructure/ansible/localhosts', playbook: './application/package.yml', extras: '-vvv')
       }
     }
