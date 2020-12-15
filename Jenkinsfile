@@ -10,7 +10,7 @@ pipeline {
 
       }
       steps{
-        sh 'cd application; umask 0002; mvn -X -Dmaven.repo.local=/var/local/.m2 -B -e compile'
+        sh 'cd application; umask 0002; mvn -Dmaven.repo.local=/var/local/.m2 -B -e compile'
       }
     }
 
@@ -23,7 +23,7 @@ pipeline {
 
       }
       steps{
-        sh 'cd application; umask 0002; mvn -X -Dmaven.repo.local=/var/local/.m2 -B install'
+        sh 'cd application; umask 0002; mvn -Dmaven.repo.local=/var/local/.m2 -B install'
       }
     }
 
