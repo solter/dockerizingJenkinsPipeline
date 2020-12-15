@@ -1,5 +1,8 @@
 pipeline {
   agent none
+  environment {
+    DOCKERHUB_CREDS = credentials('dockerhub-pmsolfest')
+  }
   stages {
     stage('Build') {
       agent {
@@ -37,7 +40,13 @@ pipeline {
         dir('/var/jenkins_home/app_build') {
           unstash 'dockerfile'
         }
-        ansiblePlaybook(inventory: './infrastructure/ansible/localhosts', playbook: './application/package.yml', extras: '-vvv')
+        ansiblePlaybook(
+          inventory: './infrastructure/ansible/localhosts', 
+          playbook: './application/package.yml', 
+          extraVars: [
+            dockerhub_username: '$DOCKERHUB_CREDS_USR',
+            dockerhub_password: '$DOCKERHUB_CREDS_PSW']
+          )
       }
     }
   }

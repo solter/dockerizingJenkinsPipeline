@@ -10,6 +10,13 @@
 
     - debug: var=jar_file_path.stdout_lines[0]
 
+    - name: log in to dockerhub
+      community.docker.docker_login:
+        state: present
+        registry_url: "https://index.docker.io/v1/" # dockerhub
+        username: "{{ dockerhub_username }}"
+        password: "{{ dockerhub_password }}"
+
     - name: build and docker application
       community.docker.docker_image:
         name: pmsolfest/project1.1-application
